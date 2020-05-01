@@ -9,27 +9,37 @@ class Restaurant extends Component {
     this.state = {
       orders: 0,
       barOrders: 0,
+      loungeOrders: 0,
+      saloonOrders: 0,
     };
 
     this.newOrder = this.newOrder.bind(this);
   }
 
-  newOrder() {
-    console.log("new order is coming");
+  newOrder(local) {
+    console.log("new order is coming", local);
 
     this.setState({
+      [local]: this.state[local] + 1,
       orders: this.state.orders + 1,
     });
   }
 
   render() {
     console.log("restaurant render");
+
+    const { barOrders, ...mainRoomOrders } = this.state;
+
     return (
       <div className="component">
-        <h1>Restaurant - lifting the state UP! {this.props.id}</h1>
+        <h1>Restaurant - lifting the state UP!</h1>
         <h2>Total Orders (this.state.orders): {this.state.orders}</h2>
-        <Bar orders={this.state.orders} newOrder={this.newOrder} />
-        <MainRoom orders={this.state.orders} newOrder={this.newOrder} />
+        <Bar
+          orders={this.state.orders}
+          barOrders={barOrders}
+          newOrder={this.newOrder}
+        />
+        <MainRoom newOrder={this.newOrder} {...mainRoomOrders} />
       </div>
     );
   }
